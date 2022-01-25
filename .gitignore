@@ -1,0 +1,11 @@
+
+/tests/_support/_generated/
+/tests/_log/
+
+/vendor/
+
+/.git-hooks.local
+
+/phpcs.xml
+/phpunit.xml
+/robo.yml
