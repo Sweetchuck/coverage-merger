@@ -1,6 +1,7 @@
 
-/tests/_support/_generated/
+/tests/_data/fixtures/case-01/reports/
 /tests/_log/
+/tests/_support/_generated/
 
 /vendor/
 

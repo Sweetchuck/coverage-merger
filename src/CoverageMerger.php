@@ -5,10 +5,43 @@ declare(strict_types = 1);
 namespace Sweetchuck\CoverageMerger;
 
 use SebastianBergmann\CodeCoverage\CodeCoverage;
+use SebastianBergmann\CodeCoverage\Driver\Selector as DriverSelector;
+use SebastianBergmann\CodeCoverage\Filter as CodeCoverageFilter;
+use SebastianBergmann\CodeCoverage\Report\PHP;
 
-class PhpMergerBase
+class CoverageMerger implements CoverageMergerInterface
 {
-    protected CodeCoverage $coverage;
+    protected ?CodeCoverage $coverage = null;
+
+    public function getCoverage(): ?CodeCoverage
+    {
+        return $this->coverage;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setCoverage(CodeCoverage $coverage)
+    {
+        $this->coverage = $coverage;
+
+        return $this;
+    }
+
+    public function merge(\Iterator $phpFiles): CodeCoverage
+    {
+        return $this
+            ->start()
+            ->addPhpFiles($phpFiles)
+            ->getCoverage();
+    }
+
+    public function start()
+    {
+        $this->coverage = $this->creteCodeCoverage();
+
+        return $this;
+    }
 
     /**
      * @return $this
@@ -30,7 +63,10 @@ class PhpMergerBase
      */
     public function addPhpFile($phpFile)
     {
-        $filename = $phpFile instanceof \SplFileInfo ? $phpFile->getPathname() : rtrim($phpFile, "\r\n");
+        $filename = $phpFile instanceof \SplFileInfo ?
+            $phpFile->getPathname()
+            : rtrim($phpFile, "\r\n");
+
         $filename = $this->prepareInputFilename($filename);
         if ($filename === '') {
             return $this;
@@ -41,6 +77,21 @@ class PhpMergerBase
         $this->coverage->merge($coverage);
 
         return $this;
+    }
+
+    public function getFileContent(): ?string
+    {
+        $coverage = $this->getCoverage();
+
+        return $coverage ? (new PHP)->process($coverage) . "\n" : null;
+    }
+
+    protected function creteCodeCoverage(): CodeCoverage
+    {
+        $filter = new CodeCoverageFilter();
+        $driver = (new DriverSelector())->forLineCoverage($filter);
+
+        return new CodeCoverage($driver, $filter);
     }
 
     /**
