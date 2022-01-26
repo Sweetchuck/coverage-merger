@@ -6,9 +6,40 @@ namespace Sweetchuck\CoverageMerger;
 
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 
-class PhpMergerBase
+class CoverageMerger
 {
-    protected CodeCoverage $coverage;
+
+    protected ?CodeCoverage $coverage;
+
+    public function getCoverage(): ?CodeCoverage
+    {
+        return $this->coverage;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setCoverage(CodeCoverage $coverage)
+    {
+        $this->coverage = $coverage;
+
+        return $this;
+    }
+
+    public function merge(\Iterator $phpFiles): CodeCoverage
+    {
+        return $this
+            ->start()
+            ->addPhpFiles($phpFiles)
+            ->getCoverage();
+    }
+
+    public function start()
+    {
+        $this->coverage = $this->creteCodeCoverage();
+
+        return $this;
+    }
 
     /**
      * @return $this
@@ -41,6 +72,14 @@ class PhpMergerBase
         $this->coverage->merge($coverage);
 
         return $this;
+    }
+
+    protected function creteCodeCoverage(): CodeCoverage
+    {
+        $filter = null;
+        $driver = null;
+
+        return new CodeCoverage($driver, $filter);
     }
 
     /**

@@ -1,7 +1,5 @@
 
 php:
-    extension:
-        xdebug: 'xdebug'
     executable:
         pcov:
             available: true
@@ -10,7 +8,7 @@ php:
             available: true
             envVar:
                 XDEBUG_MODE: 'coverage'
-            command: 'php -d zend_extension=${php.extension.xdebug}'
+            command: 'php -d zend_extension=xdebug'
         phpdbg:
             available: true
             command: 'phpdbg -qrr'

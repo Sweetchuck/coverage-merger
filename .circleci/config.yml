@@ -13,35 +13,22 @@ orbs:
     COMPOSER_DISABLE_XDEBUG_WARN: '1'
     COMPOSER_CACHE_DIR: '/home/circleci/.cache/composer'
 
+.env_xdebug: &env_xdebug
+    XDEBUG_MODE: 'devel,coverage'
+
 executors:
     php_min:
         environment:
             <<: *env_app
             <<: *env_composer
+            <<: *env_xdebug
 
         docker:
             -
                 name: 'main'
                 image: 'circleci/php:7.4'
-    php_plus1:
-        environment:
-            <<: *env_app
-            <<: *env_composer
-
-        docker:
-            -
-                name: 'main'
-                image: 'circleci/php:8.0'
 
 commands:
-    install_php_extension_pcov:
-        description: 'Install PCOV PHP extension'
-        steps:
-            -
-                run:
-                    name: 'Install PCOV PHP extension - pecl install pcov'
-                    command: 'sudo pecl install pcov'
-
     composer_install:
         description: 'Install Composer dependencies with cache restore and save'
         steps:
@@ -106,15 +93,6 @@ jobs:
         working_directory: '~/repo'
         steps:
             - 'checkout'
-            - 'install_php_extension_pcov'
-            - 'composer_install'
-            - 'test'
-    test_php_plus1:
-        executor: 'php_plus1'
-        working_directory: '~/repo'
-        steps:
-            - 'checkout'
-            - 'install_php_extension_pcov'
             - 'composer_install'
             - 'test'
 
@@ -129,9 +107,5 @@ workflows:
                         - 'build'
             -
                 test_php_min:
-                    requires:
-                        - 'build'
-            -
-                test_php_plus1:
                     requires:
                         - 'build'
