@@ -5,8 +5,9 @@ declare(strict_types = 1);
 namespace Sweetchuck\CoverageMerger;
 
 use SebastianBergmann\CodeCoverage\CodeCoverage;
+use SebastianBergmann\CodeCoverage\Report\PHP;
 
-class CoverageMerger
+class CoverageMerger implements CoverageMergerInterface
 {
 
     protected ?CodeCoverage $coverage;
@@ -72,6 +73,13 @@ class CoverageMerger
         $this->coverage->merge($coverage);
 
         return $this;
+    }
+
+    public function getFileContent(): ?string
+    {
+        $coverage = $this->getCoverage();
+
+        return $coverage ? (new PHP)->process($coverage) . "\n" : null;
     }
 
     protected function creteCodeCoverage(): CodeCoverage
