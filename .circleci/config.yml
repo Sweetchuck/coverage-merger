@@ -13,22 +13,37 @@ orbs:
     COMPOSER_DISABLE_XDEBUG_WARN: '1'
     COMPOSER_CACHE_DIR: '/home/circleci/.cache/composer'
 
-.env_xdebug: &env_xdebug
-    XDEBUG_MODE: 'devel,coverage'
-
 executors:
     php_min:
         environment:
             <<: *env_app
             <<: *env_composer
-            <<: *env_xdebug
-
         docker:
             -
                 name: 'main'
-                image: 'circleci/php:7.4'
+                image: 'cimg/php:7.4'
 
 commands:
+    install_php_extension_pcov:
+        description: 'Install PCOV PHP extension'
+        steps:
+            -
+                run:
+                    name: 'Install PCOV PHP extension - pecl install pcov'
+                    command: |
+                        if php -m | grep pcov ; then
+                            exit 0
+                        fi
+
+                        sudo pecl install pcov
+                        if php -m | grep pcov ; then
+                            exit 0
+                        fi
+
+                        scanDir="$(php -i | grep --color=never --only-matching --perl-regexp '(?<=^Scan this dir for additional \.ini files => ).+')"
+                        echo 'extension=pcov' | sudo tee "${scanDir}/pcov.ini"
+                        php -m | grep pcov
+
     composer_install:
         description: 'Install Composer dependencies with cache restore and save'
         steps:
@@ -58,7 +73,8 @@ commands:
             -
                 run:
                     name: 'Run linters'
-                    command: '"$(composer config bin-dir)/robo" --ansi lint'
+                    command: |
+                        "$(composer config bin-dir)/robo" --ansi lint
 
     test:
         description: 'Run tests'
@@ -66,7 +82,8 @@ commands:
             -
                 run:
                     name: 'Codeception - unit'
-                    command: '"$(composer config bin-dir)/robo" --ansi test unit'
+                    command: |
+                        "$(composer config bin-dir)/robo" --ansi test unit
             -   codecov/upload:
                     flags: 'unit'
                     file: './tests/_log/machine/coverage/unit/coverage.xml'
@@ -77,22 +94,23 @@ commands:
 jobs:
     build:
         executor: 'php_min'
-        working_directory: '~/repo'
         steps:
             - 'checkout'
             - 'composer_install'
     lint:
         executor: 'php_min'
-        working_directory: '~/repo'
         steps:
             - 'checkout'
             - 'composer_install'
             - 'lint'
-    test_php_min:
-        executor: 'php_min'
-        working_directory: '~/repo'
+    test:
+        parameters:
+            executor:
+                type: 'string'
+        executor: '<<parameters.executor>>'
         steps:
             - 'checkout'
+            - 'install_php_extension_pcov'
             - 'composer_install'
             - 'test'
 
@@ -106,6 +124,11 @@ workflows:
                     requires:
                         - 'build'
             -
-                test_php_min:
+                test:
+                    name: 'test_<<matrix.executor>>'
                     requires:
                         - 'build'
+                    matrix:
+                        parameters:
+                            executor:
+                                - 'php_min'

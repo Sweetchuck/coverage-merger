@@ -9,8 +9,7 @@ use SebastianBergmann\CodeCoverage\Report\PHP;
 
 class CoverageMerger implements CoverageMergerInterface
 {
-
-    protected ?CodeCoverage $coverage;
+    protected ?CodeCoverage $coverage = null;
 
     public function getCoverage(): ?CodeCoverage
     {
