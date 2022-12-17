@@ -1,14 +1,6 @@
 
 php:
-    executable:
-        pcov:
-            available: true
-            command: 'php -d extension=pcov'
-        xdebug:
-            available: true
-            envVar:
-                XDEBUG_MODE: 'coverage'
-            command: 'php -d zend_extension=xdebug'
-        phpdbg:
-            available: true
-            command: 'phpdbg -qrr'
+    executables:
+        php_min:
+            enabled: true
+            command: 'php'
