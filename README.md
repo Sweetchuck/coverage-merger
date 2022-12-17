@@ -12,7 +12,7 @@ phpunit/php-code-coverage into one code coverage report.
 | 2.x                        | ^9.0                      |
 
 
-This library is user by:
+This library is used by:
 
 * [coverage-merger-cli]
 
