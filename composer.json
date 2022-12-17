@@ -26,8 +26,10 @@
         "allow-plugins": {
             "sweetchuck/git-hooks": true
         },
-        "preferred-install": "dist",
         "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
         "sort-packages": true
     },
     "repositories": {},
@@ -37,6 +39,7 @@
     },
     "require-dev": {
         "ext-dom": "*",
+        "ext-json": "*",
         "ext-libxml": "*",
         "codeception/codeception": "^4.1",
         "codeception/module-asserts": "^2.0",
@@ -47,7 +50,6 @@
         "sweetchuck/robo-composer": "2.x-dev",
         "sweetchuck/robo-git": "2.x-dev",
         "sweetchuck/robo-phpcs": "2.x-dev",
-        "sweetchuck/robo-phpunit": "2.x-dev",
         "symfony/error-handler": "^5.4"
     },
     "autoload": {
@@ -59,7 +61,10 @@
         "psr-4": {
             "Sweetchuck\\CoverageMerger\\Test\\Unit\\": "tests/unit/",
             "Sweetchuck\\CoverageMerger\\Test\\": "tests/_support/"
-        }
+        },
+        "classmap": [
+            "RoboFile.php"
+        ]
     },
     "scripts": {},
     "scripts-descriptions": {},
