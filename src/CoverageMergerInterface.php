@@ -11,26 +11,15 @@ interface CoverageMergerInterface
 
     public function getCoverage(): ?CodeCoverage;
 
-    /**
-     * @return $this
-     */
-    public function setCoverage(CodeCoverage $coverage);
+    public function setCoverage(CodeCoverage $coverage): static;
 
     public function merge(\Iterator $phpFiles): CodeCoverage;
 
-    public function start();
+    public function start(): static;
 
-    /**
-     * @return $this
-     */
-    public function addPhpFiles(\Iterator $phpFiles);
+    public function addPhpFiles(\Iterator $phpFiles): static;
 
-    /**
-     * @param string|\SplFileInfo $phpFile
-     *
-     * @return $this
-     */
-    public function addPhpFile($phpFile);
+    public function addPhpFile(string|\SplFileInfo $phpFile): static;
 
     public function getFileContent(): ?string;
 }

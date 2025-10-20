@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Sweetchuck\CoverageMerger\Test\Fixtures\Case01;
+namespace Sweetchuck\CoverageMerger\Tests\Fixtures\Case01;
 
 class A
 {

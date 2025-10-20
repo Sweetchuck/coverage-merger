@@ -18,10 +18,7 @@ class CoverageMerger implements CoverageMergerInterface
         return $this->coverage;
     }
 
-    /**
-     * @return $this
-     */
-    public function setCoverage(CodeCoverage $coverage)
+    public function setCoverage(CodeCoverage $coverage): static
     {
         $this->coverage = $coverage;
 
@@ -36,17 +33,14 @@ class CoverageMerger implements CoverageMergerInterface
             ->getCoverage();
     }
 
-    public function start()
+    public function start(): static
     {
         $this->coverage = $this->creteCodeCoverage();
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function addPhpFiles(\Iterator $phpFiles)
+    public function addPhpFiles(\Iterator $phpFiles): static
     {
         while ($phpFiles->valid()) {
             $this->addPhpFile($phpFiles->current());
@@ -56,12 +50,7 @@ class CoverageMerger implements CoverageMergerInterface
         return $this;
     }
 
-    /**
-     * @param string|\SplFileInfo $phpFile
-     *
-     * @return $this
-     */
-    public function addPhpFile($phpFile)
+    public function addPhpFile(string|\SplFileInfo $phpFile): static
     {
         $filename = $phpFile instanceof \SplFileInfo ?
             $phpFile->getPathname()
@@ -94,13 +83,11 @@ class CoverageMerger implements CoverageMergerInterface
         return new CodeCoverage($driver, $filter);
     }
 
-    /**
-     * @return $this
-     */
-    protected function normalizeCoverage(CodeCoverage $coverage)
+    protected function normalizeCoverage(CodeCoverage $coverage): static
     {
         $tests = $coverage->getTests();
         foreach ($tests as &$test) {
+            // @phpstan-ignore-next-line
             $test['fromTestcase'] = $test['fromTestcase'] ?? false;
         }
         $coverage->setTests($tests);
@@ -117,7 +104,7 @@ class CoverageMerger implements CoverageMergerInterface
         );
     }
 
-    protected function requireFile(string $filename)
+    protected function requireFile(string $filename): mixed
     {
         return require $filename;
     }

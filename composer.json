@@ -24,6 +24,7 @@
     "prefer-stable": true,
     "config": {
         "allow-plugins": {
+            "phpstan/extension-installer": true,
             "sweetchuck/git-hooks": true
         },
         "optimize-autoloader": true,
@@ -34,22 +35,23 @@
     },
     "repositories": {},
     "require": {
-        "php": ">=7.4",
-        "phpunit/php-code-coverage": "^9.0"
+        "php": ">=8.4",
+        "phpunit/php-code-coverage": "^10.0"
     },
     "require-dev": {
         "ext-dom": "*",
         "ext-libxml": "*",
-        "codeception/codeception": "^4.1",
-        "codeception/module-asserts": "^2.0",
-        "consolidation/robo": "^3.0",
-        "nuvoleweb/robo-config": "^2.0",
-        "squizlabs/php_codesniffer": "^3.6",
+        "nuvoleweb/robo-config": "^3.0",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpunit/phpunit": "^10.0",
+        "squizlabs/php_codesniffer": "^4.0",
         "sweetchuck/git-hooks": "2.x-dev",
-        "sweetchuck/robo-composer": "2.x-dev",
-        "sweetchuck/robo-git": "2.x-dev",
-        "sweetchuck/robo-phpcs": "2.x-dev",
-        "symfony/error-handler": "^5.4 || ^6.0"
+        "sweetchuck/robo-composer": "4.x-dev",
+        "sweetchuck/robo-git": "4.x-dev",
+        "sweetchuck/robo-phpcs": "4.x-dev",
+        "sweetchuck/robo-phpstan": "3.x-dev"
     },
     "autoload": {
         "psr-4": {
@@ -58,13 +60,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Sweetchuck\\CoverageMerger\\Test\\Fixtures\\Case01\\Tests\\": "tests/_data/fixtures/case-01/tests/",
-            "Sweetchuck\\CoverageMerger\\Test\\Fixtures\\Case01\\": "tests/_data/fixtures/case-01/src/",
-            "Sweetchuck\\CoverageMerger\\Test\\Unit\\": "tests/unit/",
-            "Sweetchuck\\CoverageMerger\\Test\\": "tests/_support/"
+            "Sweetchuck\\CoverageMerger\\Tests\\": "tests/src/",
+            "Sweetchuck\\CoverageMerger\\Tests\\Fixtures\\Case01\\": "tests/fixtures/case-01/src/",
+            "Sweetchuck\\CoverageMerger\\Tests\\Fixtures\\Case01\\Tests\\": "tests/fixtures/case-01/tests/"
         }
-    },
-    "scripts": {},
-    "scripts-descriptions": {},
-    "extra": {}
+    }
 }
